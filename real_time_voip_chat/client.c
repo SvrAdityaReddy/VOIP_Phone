@@ -62,11 +62,6 @@ int main(int argc, char *argv[]) {
     pa_simple *s = NULL;
     int ret = 1;
     int error;
-    /* Create the recording stream */
-    // if (!(s = pa_simple_new(NULL, argv[0], PA_STREAM_RECORD, NULL, "record", &ss, NULL, NULL, &error))) {
-    //     fprintf(stderr, __FILE__": pa_simple_new() failed: %s\n", pa_strerror(error));
-    //     goto finish;
-    // }
     // to control number of arguments passed to program
     if(argc!=3) {
         printf("Usage: ./client <server_ip> <listening_port_of_server>\n");
@@ -102,11 +97,6 @@ int main(int argc, char *argv[]) {
     }
     freeaddrinfo(result);
     if(!fork()) {
-        // while(fgets(message,MAX_DATA_SIZE,stdin)!=NULL) {
-        //     if(send(sfd,message,strlen(message),0)==-1) {
-        //         printf("Error in sending message to server\n");
-        //     }
-        // }
         if (!(s = pa_simple_new(NULL, argv[0], PA_STREAM_RECORD, NULL, "record", &ss, NULL, NULL, &error))) {
             fprintf(stderr, __FILE__": pa_simple_new() failed: %s\n", pa_strerror(error));
             goto finish;
@@ -132,10 +122,6 @@ int main(int argc, char *argv[]) {
         exit(1);
     }
     else {
-        // while((num_bytes=recv(sfd,buffer,MAX_DATA_SIZE-1,0))>0) {
-        //     buffer[num_bytes]='\0';
-        //     printf("Client: Message from Server: %s",buffer);
-        // }
         if (!(s = pa_simple_new(NULL, argv[0], PA_STREAM_PLAYBACK, NULL, "playback", &ss, NULL, NULL, &error))) {
             fprintf(stderr, __FILE__": pa_simple_new() failed: %s\n", pa_strerror(error));
             goto finish_play;
