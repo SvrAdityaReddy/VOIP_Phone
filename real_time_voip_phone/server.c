@@ -173,9 +173,9 @@ int main(int argc, char *argv[]) {
         }
         else {
             if (!(s = pa_simple_new(NULL, argv[0], PA_STREAM_PLAYBACK, NULL, "playback", &ss, NULL, NULL, &error))) {
-            fprintf(stderr, __FILE__": pa_simple_new() failed: %s\n", pa_strerror(error));
-            goto finish_play;
-        }
+                fprintf(stderr, __FILE__": pa_simple_new() failed: %s\n", pa_strerror(error));
+                goto finish_play;
+            }
         for (;;) {
             uint8_t buf[BUFSIZE];
             ssize_t r;
