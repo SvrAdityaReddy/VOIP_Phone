@@ -41,7 +41,23 @@ void grim_reap(int sig) {
     }
 }
 
-int main(int argc, int *argv[]) {
+/* A simple routine calling UNIX write() in a loop */
+static ssize_t loop_write(int fd, const void*data, size_t size) {
+    ssize_t ret = 0;
+    while (size > 0) {
+        ssize_t r;
+        if ((r = write(fd, data, size)) < 0)
+            return r;
+        if (r == 0)
+            break;
+        ret += r;
+        data = (const uint8_t*) data + r;
+        size -= (size_t) r;
+    }
+    return ret;
+}
+
+int main(int argc, char *argv[]) {
     struct addrinfo hints;
     struct addrinfo *result,*rp;
     struct sockaddr_storage claddr;
@@ -129,9 +145,74 @@ int main(int argc, int *argv[]) {
             snprintf(addr_str,ADDR_STR_LEN,"(%s, %s)",host,service);
         }
         printf("Connection from %s\n",addr_str);
-        if (!(s = pa_simple_new(NULL, argv[0], PA_STREAM_PLAYBACK, NULL, "playback", &ss, NULL, NULL, &error))) {
+        // if (!(s = pa_simple_new(NULL, argv[0], PA_STREAM_PLAYBACK, NULL, "playback", &ss, NULL, NULL, &error))) {
+        //     fprintf(stderr, __FILE__": pa_simple_new() failed: %s\n", pa_strerror(error));
+        //     goto finish;
+        // }
+        // for (;;) {
+        //     uint8_t buf[BUFSIZE];
+        //     ssize_t r;
+        //     #if 0
+        //         pa_usec_t latency;
+        //         if ((latency = pa_simple_get_latency(s, &error)) == (pa_usec_t) -1) {
+        //             fprintf(stderr, __FILE__": pa_simple_get_latency() failed: %s\n", pa_strerror(error));
+        //             goto finish;
+        //         }
+        //         fprintf(stderr, "%0.0f usec    \r", (float)latency);
+        //     #endif
+        //     /* Read some data ... */
+        //     if ((r = read(cfd, buf, sizeof(buf))) <= 0) {
+        //         if (r == 0) /* EOF */
+        //             break;
+        //         fprintf(stderr, __FILE__": read() failed: %s\n", strerror(errno));
+        //         goto finish;
+        //     }
+        //     /* ... and play it */
+        //     if (pa_simple_write(s, buf, (size_t) r, &error) < 0) {
+        //         fprintf(stderr, __FILE__": pa_simple_write() failed: %s\n", pa_strerror(error));
+        //         goto finish;
+        //     }
+        // }
+        // /* Make sure that every single sample was played */
+        // if (pa_simple_drain(s, &error) < 0) {
+        //     fprintf(stderr, __FILE__": pa_simple_drain() failed: %s\n", pa_strerror(error));
+        //     goto finish;
+        // }
+        // ret = 0;
+        // finish:
+        //     if (s)
+        //         pa_simple_free(s);
+        // return ret;
+        // forking a child process to handle each request
+        if(!fork()) {
+            if (!(s = pa_simple_new(NULL, argv[0], PA_STREAM_RECORD, NULL, "record", &ss, NULL, NULL, &error))) {
             fprintf(stderr, __FILE__": pa_simple_new() failed: %s\n", pa_strerror(error));
             goto finish;
+            }
+            for (;;) {
+                uint8_t buf[BUFSIZE];
+                /* Record some data ... */
+                if (pa_simple_read(s, buf, sizeof(buf), &error) < 0) {
+                    fprintf(stderr, __FILE__": pa_simple_read() failed: %s\n", pa_strerror(error));
+                    goto finish;
+                }
+                /* And write it to STDOUT */
+                if (loop_write(cfd, buf, sizeof(buf)) != sizeof(buf)) {
+                    fprintf(stderr, __FILE__": write() failed: %s\n", strerror(errno));
+                    goto finish;
+                }
+            }
+            ret = 0;
+            finish:
+            if (s)
+                pa_simple_free(s);
+            return ret;
+            exit(1);
+        }
+        else {
+            if (!(s = pa_simple_new(NULL, argv[0], PA_STREAM_PLAYBACK, NULL, "playback", &ss, NULL, NULL, &error))) {
+            fprintf(stderr, __FILE__": pa_simple_new() failed: %s\n", pa_strerror(error));
+            goto finish_play;
         }
         for (;;) {
             uint8_t buf[BUFSIZE];
@@ -149,44 +230,25 @@ int main(int argc, int *argv[]) {
                 if (r == 0) /* EOF */
                     break;
                 fprintf(stderr, __FILE__": read() failed: %s\n", strerror(errno));
-                goto finish;
+                goto finish_play;
             }
             /* ... and play it */
             if (pa_simple_write(s, buf, (size_t) r, &error) < 0) {
                 fprintf(stderr, __FILE__": pa_simple_write() failed: %s\n", pa_strerror(error));
-                goto finish;
+                goto finish_play;
             }
         }
         /* Make sure that every single sample was played */
         if (pa_simple_drain(s, &error) < 0) {
             fprintf(stderr, __FILE__": pa_simple_drain() failed: %s\n", pa_strerror(error));
-            goto finish;
+            goto finish_play;
         }
         ret = 0;
-        finish:
+        finish_play:
             if (s)
                 pa_simple_free(s);
         return ret;
-        // forking a child process to handle each request
-        // if(!fork()) {
-        //     close(lfd);
-        //     if(!fork()) {
-        //         while((num_bytes=recv(cfd,buffer,MAX_DATA_SIZE-1,0))>0) {
-        //             buffer[num_bytes]='\0';
-        //             printf("Server: Message from %s: %s",host,buffer);      
-        //         }
-        //         exit(1);
-        //     }
-        //     else {
-        //         while(fgets(message,MAX_DATA_SIZE,stdin)!=NULL) {
-        //             if(send(cfd,message,strlen(message),0)==-1) {
-        //                 printf("Error in sending message to (%s, %s)\n",host,service);
-        //             }    
-        //         }
-        //         exit(1);
-        //     }
-        //     exit(1);
-        // }
+        }
     }
     return 0;
 }
