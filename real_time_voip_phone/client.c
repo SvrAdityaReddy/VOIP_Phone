@@ -1,3 +1,10 @@
+/**
+ * @author SvrAdityaReddy
+ * @email Aditya.seelapureddy@yahoo.com
+ * @create date 2018-04-21 04:09:06
+ * @modify date 2018-04-21 04:09:06
+ * @desc voip phone client code
+*/
 #ifdef HAVE_CONFIG_H
 #include <config.h>
 #endif
