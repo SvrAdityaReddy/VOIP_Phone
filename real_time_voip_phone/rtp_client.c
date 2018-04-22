@@ -18,50 +18,46 @@
  *******/
 
 
-#include		<sys/types.h>
-#include		<sys/socket.h>
+#include <sys/types.h>
+#include <sys/socket.h>
 
-#include		<netinet/in.h>
-#include		<arpa/inet.h>
+#include <netinet/in.h>
+#include <arpa/inet.h>
 
-#include		<stdio.h>
-#include		<stdlib.h>
-#include		<string.h>
-#include		<unistd.h>
-#include		<err.h>
-
-
-#include 		"Config.h"
-#include 		"RTP.h"
-#include 		"Types.h"
-#include 		"Proto.h"
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <unistd.h>
+#include <err.h>
 
 
+#include "RTP_lib/Config.h"
+#include "RTP_lib/RTP.h"
+#include "RTP_lib/Types.h"
+#include "RTP_lib/Proto.h"
 
 
 
-int			main(void)
-{
-	char		buffer[MAX_PAYLOAD_LEN];
-	context		cid;
-	u_int32		period;
-	u_int32		t_inc;
-	u_int16		size_read;
-	u_int16		last_size_read;
-	FILE		*fd;
 
+
+int	main(int arc, char**argv) {
+	char buffer[MAX_PAYLOAD_LEN];
+	context	cid;
+	u_int32	period;
+	u_int32	t_inc;
+	u_int16	size_read;
+	u_int16	last_size_read;
+	FILE *fd;
 
 	conx_context_t 	 *coucou = NULL;
 	remote_address_t *s	 = NULL;
-
-
 
 	period = Get_Period_us(PAYLOAD_TYPE);
 	last_size_read = 1;
 	printf("period: %d\n",period);
 	Init_Socket();
 	RTP_Create(&cid);
-	RTP_Add_Send_Addr(cid, "127.0.0.1", UDP_PORT, 6);
+	RTP_Add_Send_Addr(cid, argv[1], UDP_PORT, 6);
 
 	Set_Extension_Profile(cid, 27);
 	Add_Extension(cid, 123456);

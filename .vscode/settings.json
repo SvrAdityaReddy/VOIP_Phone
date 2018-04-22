@@ -1,5 +1,10 @@
 {
     "files.associations": {
-        "wait.h": "c"
+        "wait.h": "c",
+        "rtp.h": "c",
+        "types.h": "c",
+        "proto.h": "c",
+        "config.h": "c",
+        "macros.h": "c"
     }
 }
