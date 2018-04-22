@@ -36,7 +36,7 @@
 #include 		"Macros.h"
 #include 		"Proto.h"
 
-#include		"Rtp_Exemple_Receive.h"
+#include		"Rtp_struct_definitions.h"
 
 // FONCTIONS Local@udpserv.c
 

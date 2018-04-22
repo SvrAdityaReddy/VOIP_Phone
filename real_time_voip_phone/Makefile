@@ -1,7 +1,7 @@
 BIN		= rtp_client
-OBJECTS 	= rtp_client.o RTP.o Hdr_Builder.o Network.o Utils.o Rtp_Exemple_Receive_Print.o
+OBJECTS 	= rtp_client.o RTP.o Hdr_Builder.o Network.o Utils.o
 BIN2		= rtp_server
-OBJECTS2	= rtp_server.o RTP.o Hdr_Builder.o Network.o Utils.o Rtp_Exemple_Receive_Print.o
+OBJECTS2	= rtp_server.o RTP.o Hdr_Builder.o Network.o Utils.o
 CC = gcc
 
 all: send receive
@@ -30,8 +30,8 @@ receive: $(OBJECTS2)
 rtp_server.o: rtp_server.c
 	$(CC) -c rtp_server.c
 
-Rtp_Exemple_Receive_Print.o: RTP_lib/Rtp_Exemple_Receive_Print.c
-	$(CC) -c RTP_lib/Rtp_Exemple_Receive_Print.c
+# Rtp_Exemple_Receive_Print.o: RTP_lib/Rtp_Exemple_Receive_Print.c
+# 	$(CC) -c RTP_lib/Rtp_Exemple_Receive_Print.c
 
 clean:
 	rm -f $(OBJECTS) $(OBJECTS2) $(BIN) $(BIN2) *~ *.core

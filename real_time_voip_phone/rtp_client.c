@@ -18,6 +18,7 @@
  *******/
 
 
+
 #include <sys/types.h>
 #include <sys/socket.h>
 
@@ -36,12 +37,11 @@
 #include "RTP_lib/Types.h"
 #include "RTP_lib/Proto.h"
 
+#define MAX_DATA_SIZE 50
 
-
-
-
-int	main(int arc, char**argv) {
+int	main(int argc, char**argv) {
 	char buffer[MAX_PAYLOAD_LEN];
+	char message[MAX_DATA_SIZE];
 	context	cid;
 	u_int32	period;
 	u_int32	t_inc;
@@ -49,13 +49,19 @@ int	main(int arc, char**argv) {
 	u_int16	last_size_read;
 	FILE *fd;
 
-	conx_context_t 	 *coucou = NULL;
+	conx_context_t *coucou = NULL;
 	remote_address_t *s	 = NULL;
+
+	// to control number of arguments passed to program
+    if(argc!=2) {
+        printf("Usage: ./rtp_client <server_ip>\n");
+        return 0;
+    }
 
 	period = Get_Period_us(PAYLOAD_TYPE);
 	last_size_read = 1;
 	printf("period: %d\n",period);
-	Init_Socket();
+	// Init_Socket();
 	RTP_Create(&cid);
 	RTP_Add_Send_Addr(cid, argv[1], UDP_PORT, 6);
 
@@ -63,17 +69,22 @@ int	main(int arc, char**argv) {
 	Add_Extension(cid, 123456);
 	Add_Extension(cid, 654321);
 	Add_CRSC(cid, 12569);
-
-	fd = fopen("coucou.txt", "r");
-	while (size_read = fread(buffer, 1, MAX_PAYLOAD_LEN, fd))
-	{
-		t_inc = last_size_read * period;
-		RTP_Send(cid, t_inc, 0, PAYLOAD_TYPE, buffer, size_read);
-		last_size_read = size_read;
-		printf("last_size_read: %d\n",last_size_read);
+	if(!fork()) {
+		while (fgets(message,MAX_PAYLOAD_LEN,stdin)!=NULL) {
+			RTP_Send(cid, t_inc, 0, PAYLOAD_TYPE, message, strlen(message));
+			// printf("last_size_read: %d\n",last_size_read);
+			// printf("%s\n",message);
+		}
 	}
+	else {
+		
+	}
+	// while (fgets(message,MAX_PAYLOAD_LEN,stdin)!=NULL) {
+	// 	RTP_Send(cid, t_inc, 0, PAYLOAD_TYPE, message, strlen(message));
+	// 	// printf("last_size_read: %d\n",last_size_read);
+	// 	// printf("%s\n",message);
+	// }
 
-	fclose(fd);
 	RTP_Destroy(cid);
 	Close_Socket();
 	return (0);
