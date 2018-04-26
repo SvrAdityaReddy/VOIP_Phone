@@ -17,33 +17,37 @@
  * 
  *******/
 
-#include		<sys/types.h>
-#include		<sys/socket.h>
+#include <sys/types.h>
+#include <sys/socket.h>
 
-#include		<netinet/in.h>
-#include		<arpa/inet.h>
+#include <netinet/in.h>
+#include <arpa/inet.h>
 
-#include		<stdio.h>
-#include		<stdlib.h>
-#include		<string.h>
-#include		<unistd.h>
-#include		<err.h>
-#include 		<math.h>
-#include		<errno.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <unistd.h>
+#include <err.h>
+#include <math.h>
+#include <errno.h>
 
-#include 		"RTP_lib/Config.h"
-#include 		"RTP_lib/RTP.h"
-#include 		"RTP_lib/Macros.h"
-#include 		"RTP_lib/Proto.h"
+#include "RTP_lib/Config.h"
+#include "RTP_lib/RTP.h"
+#include "RTP_lib/Macros.h"
+#include "RTP_lib/Proto.h"
 
-#include		"RTP_lib/Rtp_struct_definitions.h"
+#include "RTP_lib/Rtp_struct_definitions.h"
 
-static void		us_serve(struct us *);
-static void		us_conf(struct us *);
-static int		us_start(struct us *);
-static int		us_setup(struct us *us);
-static struct us	*us_init(int, char **);
-static void		us_event(struct us *us, int cid, int *len);
+#include <errno.h>
+#include <pulse/simple.h>
+#include <pulse/error.h>
+
+static void	us_serve(struct us *);
+static void	us_conf(struct us *);
+static int us_start(struct us *);
+static int us_setup(struct us *us);
+static struct us *us_init(int, char **);
+static void	us_event(struct us *us, int cid, int *len);
 
 int	us_start(struct us *us) {
     t_listener		*srv;
@@ -87,8 +91,7 @@ int	us_start(struct us *us) {
 }
 
 
-void us_conf(struct us *us)
-	{
+void us_conf(struct us *us) {
 	t_listener		*srv;
 	t_client		*client;
 
@@ -155,8 +158,7 @@ int	us_setup(struct us *us) {
  	 return ++max;
 }
 
-void us_serve(struct us *us)
-	{
+void us_serve(struct us *us) {
 	int	max;
 	int	cid;
 	int	len;

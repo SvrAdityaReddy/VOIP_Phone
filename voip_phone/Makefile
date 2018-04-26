@@ -3,11 +3,12 @@ OBJECTS 	= rtp_client.o RTP.o Hdr_Builder.o Network.o Utils.o
 BIN2		= rtp_server
 OBJECTS2	= rtp_server.o RTP.o Hdr_Builder.o Network.o Utils.o
 CC = gcc
+LIBS = -lpulse -lpulse-simple
 
 all: send receive
 
 send: $(OBJECTS)
-	$(CC) $(OBJECTS) -o $(BIN)
+	$(CC) $(OBJECTS) $(LIBS) -o $(BIN)
 
 rtp_client.o: rtp_client.c
 	$(CC) -c rtp_client.c
@@ -25,7 +26,7 @@ Utils.o: RTP_lib/Utils.c
 	$(CC) -c RTP_lib/Utils.c
 
 receive: $(OBJECTS2)
-	$(CC) $(OBJECTS2) -o $(BIN2)
+	$(CC) $(OBJECTS2) $(LIBS) -o $(BIN2)
 
 rtp_server.o: rtp_server.c
 	$(CC) -c rtp_server.c

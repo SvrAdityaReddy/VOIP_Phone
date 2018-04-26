@@ -37,6 +37,10 @@
 #include "RTP_lib/Types.h"
 #include "RTP_lib/Proto.h"
 
+#include <errno.h>
+#include <pulse/simple.h>
+#include <pulse/error.h>
+
 #define MAX_DATA_SIZE 50
 
 int	main(int argc, char**argv) {
@@ -60,7 +64,7 @@ int	main(int argc, char**argv) {
 
 	period = Get_Period_us(PAYLOAD_TYPE);
 	last_size_read = 1;
-	printf("period: %d\n",period);
+	// printf("period: %d\n",period);
 	// Init_Socket();
 	RTP_Create(&cid);
 	RTP_Add_Send_Addr(cid, argv[1], UDP_PORT, 6);
@@ -69,16 +73,16 @@ int	main(int argc, char**argv) {
 	Add_Extension(cid, 123456);
 	Add_Extension(cid, 654321);
 	Add_CRSC(cid, 12569);
-	if(!fork()) {
-		while (fgets(message,MAX_PAYLOAD_LEN,stdin)!=NULL) {
-			RTP_Send(cid, t_inc, 0, PAYLOAD_TYPE, message, strlen(message));
-			// printf("last_size_read: %d\n",last_size_read);
-			// printf("%s\n",message);
-		}
+	// if(!fork()) {
+	while (fgets(message,MAX_PAYLOAD_LEN,stdin)!=NULL) {
+		RTP_Send(cid, t_inc, 0, PAYLOAD_TYPE, message, strlen(message));
+		// printf("last_size_read: %d\n",last_size_read);
+		// printf("%s\n",message);
 	}
-	else {
+	// }
+	// else {
 		
-	}
+	// }
 	// while (fgets(message,MAX_PAYLOAD_LEN,stdin)!=NULL) {
 	// 	RTP_Send(cid, t_inc, 0, PAYLOAD_TYPE, message, strlen(message));
 	// 	// printf("last_size_read: %d\n",last_size_read);
