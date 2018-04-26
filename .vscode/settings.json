@@ -6,6 +6,7 @@
         "proto.h": "c",
         "config.h": "c",
         "macros.h": "c",
-        "ortp.h": "c"
+        "ortp.h": "c",
+        "*.ipp": "c"
     }
 }
