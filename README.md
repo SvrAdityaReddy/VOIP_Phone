@@ -84,7 +84,7 @@ For very low speed of network both VOIP implementations didnot work well. But fo
 
 ## Future Scope
 
-We would like to reimplement VOIP phone instead of RTP_lib using oRTP because oRTP has the api's which would get the report statistics of the connection also jitter control and many more which could give real feel of (Session Initiation Protocol)SIP and Real Time Protocol(RTP). Also, RTP_lib is very higher level implementation. Only problem we faced in using oRTP because of installation problems and installation of it's dependencies which have to work on.
+We would like to reimplement VOIP phone instead of RTP_lib using oRTP because oRTP has the api's which would get the report statistics of the connection also jitter control and many more which could give real feel of (Session Initiation Protocol)SIP and Real Time Protocol(RTP). Also, RTP_lib is very higher level implementation. Only problem we faced in using oRTP because of installation problems and installation of it's dependencies which we have to work on.
 
 The code we had written is available on github at https://github.com/SvrAdityaReddy/VOIP_Phone
 
