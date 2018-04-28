@@ -42,6 +42,8 @@
 #include <pulse/simple.h>
 #include <pulse/error.h>
 
+#include "g711mit.c"
+
 #define BUFSIZE 1024
 
 static void	us_serve(struct us *, char **argv);
@@ -156,13 +158,15 @@ void us_event(struct us *us, int cid, int *len, char **argv) {
     }
 
 	if (FD_ISSET(srv->fd, &(us->fdset))) {
-		uint8_t buf[BUFSIZE];
+		unsigned char buf[BUFSIZE];
+		uint8_t encoded[BUFSIZE];
 		RTP_Receive(cid, srv->fd, msg, len, client->add);
 		int i=0;
-		for(int i=0;i<BUFSIZE;i++) {
+		for(i=0;i<BUFSIZE;i++) {
 			buf[i]=msg[i];
+			encoded[i]=alaw2linear(buf[i]);
 		}
-        if (pa_simple_write(s_s, buf,sizeof(buf), &error) < 0) {
+        if (pa_simple_write(s_s, encoded,sizeof(encoded), &error) < 0) {
             fprintf(stderr, __FILE__": pa_simple_write() failed: %s\n", pa_strerror(error));
 	        goto finish;
         }

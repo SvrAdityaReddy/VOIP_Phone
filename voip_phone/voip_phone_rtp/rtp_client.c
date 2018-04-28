@@ -41,6 +41,8 @@
 #include <pulse/simple.h>
 #include <pulse/error.h>
 
+#include "g711mit.c"
+
 // #define MAX_DATA_SIZE 50
 #define BUFSIZE 1024
 
@@ -90,6 +92,7 @@ int	main(int argc, char**argv) {
         }
     for (;;) {
         uint8_t buf[BUFSIZE];
+		unsigned char coded[BUFSIZE];
 		if (pa_simple_read(s_s, buf, sizeof(buf), &error) < 0) {
             	fprintf(stderr, __FILE__": pa_simple_read() failed: %s\n", pa_strerror(error));
             	goto finish;
@@ -97,7 +100,11 @@ int	main(int argc, char**argv) {
 		size_read=BUFSIZE;
 		t_inc = last_size_read * period;
 		last_size_read = size_read;
-		RTP_Send(cid,t_inc,0,PAYLOAD_TYPE,buf,BUFSIZE);
+		int i=0;
+		for(i=0;i<BUFSIZE;i++) {
+			coded[i]=linear2alaw(buf[i]);
+		}
+		RTP_Send(cid,t_inc,0,PAYLOAD_TYPE,coded,size_read);
     }
     ret = 0;
     finish:
