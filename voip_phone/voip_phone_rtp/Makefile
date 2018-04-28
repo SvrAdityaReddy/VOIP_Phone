@@ -51,4 +51,4 @@ rtp_client_g711.o: rtp_client_g711.c
 # 	$(CC) -c RTP_lib/Rtp_Exemple_Receive_Print.c
 
 clean:
-	rm -f $(OBJECTS) $(OBJECTS2) $(BIN) $(BIN2) *~ *.core
+	rm -f $(OBJECTS) $(OBJECTS2) $(OBJECTS3) $(OBJECTS4) $(BIN) $(BIN2) $(BIN3) $(BIN4) *~ *.core
