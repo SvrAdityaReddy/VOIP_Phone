@@ -1,4 +1,4 @@
-# VOIP_Phone
+# VOIP Phone
 
 In this Project we tried to implement Voice Over Internet Protocol(VOIP) phone using TCP protocol, RTP protocol and pulse audio(used for recording sound and playback of sound).
 
@@ -43,7 +43,8 @@ The following is the way we had implemented VOIP phone.
 
 ``` C
 
-int getaddrinfo(const char *node, const char *service, const struct addrinfo *hints, struct addrinfo **res);
+int getaddrinfo(const char *node, const char *service, 
+        const struct addrinfo *hints,struct addrinfo **res);
 void freeaddrinfo(struct addrinfo *res);
 int socket(int domain, int type, int protocol);
 int connect(int sockfd, const struct sockaddr *addr, socklen_t addrlen);

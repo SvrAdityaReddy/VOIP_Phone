@@ -375,7 +375,7 @@ blockquote {
 
 </head>
 <body>
-<h1 id="voipphone">VOIP_Phone</h1>
+<h1 id="voip-phone">VOIP Phone</h1>
 <p>In this Project we tried to implement Voice Over Internet Protocol(VOIP) phone using TCP protocol, RTP protocol and pulse audio(used for recording sound and playback of sound).</p>
 <h2 id="tools-used">Tools used</h2>
 <table>
@@ -424,7 +424,8 @@ $ gcc pcat-simple.c -lpulse -lpulse-simple -o pcat-simple
 <p>The following is the way we had implemented VOIP phone.</p>
 <p>1). First we had implemented Real Time Text Chat using TCP like whatsapp one to one chat between two people where two people can chat simultaneously. The following are the important api's used to implement Real Time Text Chat using TCP [2].</p>
 <pre class="hljs"><code><div>
-<span class="hljs-function"><span class="hljs-keyword">int</span> <span class="hljs-title">getaddrinfo</span><span class="hljs-params">(<span class="hljs-keyword">const</span> <span class="hljs-keyword">char</span> *node, <span class="hljs-keyword">const</span> <span class="hljs-keyword">char</span> *service, <span class="hljs-keyword">const</span> struct addrinfo *hints, struct addrinfo **res)</span></span>;
+<span class="hljs-function"><span class="hljs-keyword">int</span> <span class="hljs-title">getaddrinfo</span><span class="hljs-params">(<span class="hljs-keyword">const</span> <span class="hljs-keyword">char</span> *node, <span class="hljs-keyword">const</span> <span class="hljs-keyword">char</span> *service, 
+        <span class="hljs-keyword">const</span> struct addrinfo *hints,struct addrinfo **res)</span></span>;
 <span class="hljs-function"><span class="hljs-keyword">void</span> <span class="hljs-title">freeaddrinfo</span><span class="hljs-params">(struct addrinfo *res)</span></span>;
 <span class="hljs-function"><span class="hljs-keyword">int</span> <span class="hljs-title">socket</span><span class="hljs-params">(<span class="hljs-keyword">int</span> domain, <span class="hljs-keyword">int</span> type, <span class="hljs-keyword">int</span> protocol)</span></span>;
 <span class="hljs-function"><span class="hljs-keyword">int</span> <span class="hljs-title">connect</span><span class="hljs-params">(<span class="hljs-keyword">int</span> sockfd, <span class="hljs-keyword">const</span> struct sockaddr *addr, <span class="hljs-keyword">socklen_t</span> addrlen)</span></span>;
@@ -455,7 +456,7 @@ pa_simple* <span class="hljs-title">pa_simple_new</span> <span class="hljs-param
 <h2 id="observations">Observations</h2>
 <p>For very low speed of network both VOIP implementations didnot work well. But for moderate speeds TCP performed better than RTP when using RTP_lib and at higher speeds both performed well.</p>
 <h2 id="future-scope">Future Scope</h2>
-<p>We would like to reimplement VOIP phone instead of RTP_lib using oRTP because oRTP has the api's which would get the report statistics of the connection also jitter control and many more which could give real feel of (Session Initiation Protocol)SIP and Real Time Protocol(RTP). Also, RTP_lib is very higher level implementation. Only problem we faced in using oRTP because of installation problems and installation of it's dependencies which have to work on.</p>
+<p>We would like to reimplement VOIP phone instead of RTP_lib using oRTP because oRTP has the api's which would get the report statistics of the connection also jitter control and many more which could give real feel of (Session Initiation Protocol)SIP and Real Time Protocol(RTP). Also, RTP_lib is very higher level implementation. Only problem we faced in using oRTP because of installation problems and installation of it's dependencies which we have to work on.</p>
 <p>The code we had written is available on github at https://github.com/SvrAdityaReddy/VOIP_Phone</p>
 <h2 id="references">References</h2>
 <p>[1] <a href="https://freedesktop.org/software/pulseaudio/doxygen/examples.html">Pulseaudio example files</a> <br>
