@@ -179,7 +179,7 @@ void us_event(struct us *us, int cid, int *len, char **argv) {
     	}
         if (s_s)
 	       pa_simple_free(s_s);
-        return ret;
+        return;
 }
 
 int	us_setup(struct us *us) {
