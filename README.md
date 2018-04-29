@@ -63,13 +63,13 @@ typedef struct pa_sample_spec {
      uint8_t channels;
  } pa_sample_spec;
 
-int pa_simple_read (pa_simple * s, void * data, size_t bytes, int * error) 
-int pa_simple_write (pa_simple * s, const void * data, size_t bytes, int * error) 	
-int pa_simple_drain (pa_simple * s, int * error)
+int pa_simple_read (pa_simple * s, void * data, size_t bytes, int * error); 
+int pa_simple_write (pa_simple * s, const void * data, size_t bytes, int * error); 	
+int pa_simple_drain (pa_simple * s, int * error);
 pa_simple* pa_simple_new (const char * server, const char * name,     
         pa_stream_direction_t dir, const char * dev, const char * stream_name,
         const pa_sample_spec * ss, const pa_channel_map * map,
-        const pa_buffer_attr * attr, int * error) 		
+        const pa_buffer_attr * attr, int * error); 		
 
 ```
 
@@ -83,12 +83,12 @@ The following are the important api's of RTP_lib used
 
 ``` C
 
-int RTP_Create(context *the_context)
+int RTP_Create(context *the_context);
 int RTP_Send(context cid, u_int32 tsinc, u_int8 marker, u_int16 pti, 
-        u_int8 *payload, int len)
-int RTP_Add_Send_Addr(context cid, char *addr, u_int16 port, u_int8 ttl)
-int RTP_Receive(context cid, int fd, char *payload, int *len, struct sockaddr *sin)
-int RTP_Destroy(context cid)
+        u_int8 *payload, int len);
+int RTP_Add_Send_Addr(context cid, char *addr, u_int16 port, u_int8 ttl);
+int RTP_Receive(context cid, int fd, char *payload, int *len, struct sockaddr *sin);
+int RTP_Destroy(context cid);
 
 ```
 
