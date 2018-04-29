@@ -8,7 +8,7 @@ Type | Name
 ----------|--------
 Development Langauge | C
 TCP | Inbuilt API's of Linux
-RTP | RTP lib available from sourcefourge
+RTP | RTP lib available from sourceforge
 Audio record and playback | pulseaudio
 
 ## Installation of pulse audio
@@ -75,9 +75,22 @@ pa_simple* pa_simple_new (const char * server, const char * name,
 
 3). Next we had integrated both pulseaudio and Real Time Text Chat and obtained VOIP phone using TCP protocol. The files we coded are named as "client.c", "server.c". We named it like that because one initiates the connection with the other. These files perform duplex communication.
 
-4). Next we had looked at RTP library in Linux. We had found two libraries. One is "oRTP" from "Belledonne Communications" [3] and other is RTP_lib available from sourcefourge website [4]. 
+4). Next we had looked at RTP library in Linux. We had found two libraries. One is "oRTP" from "Belledonne Communications" [3] and other is RTP_lib available from sourceforge website [4]. 
 
-5). Next we had used RTP_lib along with pulseaudio and g711 codec to implement VOIP phone. The files we coded are named as client.c, server.c. We named it like that because one initiates the connection with the other. The files we coded are named as "rtp_client.c", "rtp_server.c". These files when run on both sides can perform duplex communication.
+5). Next we had used RTP_lib along with pulseaudio and g711 codec to implement VOIP phone. The files we coded are named as "rtp_client.c", "rtp_server.c". We named it like that because one initiates the connection with the other. These files when run on both sides can perform duplex communication.
+
+The following are the important api's of RTP_lib used 
+
+``` C
+
+int RTP_Create(context *the_context)
+int RTP_Send(context cid, u_int32 tsinc, u_int8 marker, u_int16 pti, 
+        u_int8 *payload, int len)
+int RTP_Add_Send_Addr(context cid, char *addr, u_int16 port, u_int8 ttl)
+int RTP_Receive(context cid, int fd, char *payload, int *len, struct sockaddr *sin)
+int RTP_Destroy(context cid)
+
+```
 
 ## Observations
 
@@ -92,6 +105,9 @@ The code we had written is available on github at https://github.com/SvrAdityaRe
 ## References
 
 [1] [Pulseaudio example files](https://freedesktop.org/software/pulseaudio/doxygen/examples.html) <br>
+
 [2] [The Linux Programming Interface by Michael Kerrisk](https://moodle2.units.it/pluginfile.php/115306/mod_resource/content/1/The%20Linux%20Programming%20Interface-Michael%20Kerrisk.pdf) <br>
-[3] [oRTP RTP Library](http://www.linphone.org/technical-corner/ortp/overview) <br>
-[4] [RTP Library in C](https://sourceforge.net/projects/rtp-lib/) <br>
+
+[3] [oRTP RTP Library from Belledonne Communications](http://www.linphone.org/technical-corner/ortp/overview) <br>
+
+[4] [RTP Library in C available on sourceforge](https://sourceforge.net/projects/rtp-lib/) <br>
